@@ -1,100 +1,40 @@
-import java.util.*;
-import java.lang.*;
+class Solution {
+    public int numDecodings(String s) {
 
-class possibleDecoding{
+        int[] nums = new int[s.length()+1];
 
-  public static void main(String args[]){
-    Scanner input = new Scanner(System.in);
-    int[] numbers = createArray();
-    int n = findCount(numbers);
-    System.out.println("count is: "+n);
+        nums[0] = 1;
+        nums[1] = s.charAt(0) == '0'? 0:1;
+        for(int i=2;i<=s.length();i++){
+            int one = Integer.valueOf(s.substring(i-1,i));
+            int two = Integer.valueOf(s.substring(i-2,i));
+            if(one >=1){
+                nums[i] += nums[i-1];
+            }
+            if(two>=10 && two <=26){
+                nums[i] += nums[i-2];
+            }
+        }
 
-  }
-
-  public static int[] createArray(){
-    Scanner input = new Scanner(System.in);
-    System.out.println("Enter array size");
-    int n = input.nextInt();
-    System.out.println("enter elements");
-    int[] arr = new int[n];
-    for(int i=0;i<n;i++){
-      arr[i] = input.nextInt();
-      if( arr[i]>9 || arr[i] <0){
-        System.out.println("not allowed");
-        System.exit(0);
-      }
+        return nums[s.length()];
     }
-    return arr;
-  }
-
-  public static int findCount(int[] arr){
-    int count = 1;
-    int len = arr.length;
-    int i=0,j=0;
-    int num=0;
-    // boolean flag1 = false, flag2 = false;
-    // for(i=0;i<len;i++){
-    //   j = i+1;
-    //   if(arr[i]==0 && arr[j]==0 && j<len){
-    //     flag1 = true;
-    //   }
-    // }
-    // if(arr[len-1]==0){
-    //   flag2 = true;
-    //   len--;
-    // }
-    while(i<len){
-      j = i+1;
-      if(j<len){
-        num = arr[i]*10 + arr[j];
-        if(num<=26){
-          count++;
-          i+=2;
-        }
-        else{
-          i++;
-        }
-      }
-      else{
-        break;
-      }
-    }
-    // if(len%2==0){
-    //   return count;
-    // }
-    if(arr[len-1]==0){
-      len++;
-    }
-    i=len-1;
-    j=0;
-    while(i>=0){
-      j = i-1;
-      if(j>=0){
-        if(arr[j]==0){
-          i-=2;
-        }
-        else {
-          num = arr[j]*10 + arr[i];
-        }
-        if(num<=26){
-          count++;
-          i-=2;
-        }
-        else{
-          i--;
-        }
-      }
-      else {
-        break;
-      }
-    }
-    //
-    // if(flag1 || flag2){
-    //   count /=2;
-    // }
-
-    return count;
-
-  }
-
 }
+
+
+//0ms solution
+// class Solution {
+//     public int numDecodings(String s) {
+//
+//         if(s.length() == 0) return 0;
+//     int pre = 27, digit, answer = 0, first = 1, second = 1;
+//     for(int i = s.length()-1; i >= 0; i--){
+//         digit = s.charAt(i) - '0';
+//         if(digit == 0) answer = 0;
+//         else answer = first + (digit*10 + pre < 27 ? second : 0);
+//         second = first; first = answer; pre = digit;
+//     }
+//     return answer;
+//
+//     }
+//
+// }
